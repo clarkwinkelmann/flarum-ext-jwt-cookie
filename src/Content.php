@@ -44,15 +44,16 @@ class Content
 
         try {
             $tks = \explode('.', $jwt);
-            list($headb64, $bodyb64, $cryptob64) = $tks;
-            $payload = JWT::jsonDecode(JWT::urlsafeB64Decode($bodyb64));
+            if (count($tks) >= 2) {
+                $payload = JWT::jsonDecode(JWT::urlsafeB64Decode($tks[1]));
 
-            if (isset($payload->aud)) {
-                $safeProjectId = e($payload->aud);
-            }
+                if (isset($payload->aud)) {
+                    $safeProjectId = e($payload->aud);
+                }
 
-            if (isset($payload->sub)) {
-                $safeUserId = e($payload->sub);
+                if (isset($payload->sub)) {
+                    $safeUserId = e($payload->sub);
+                }
             }
         } catch (\Exception $exception) {
             // ignore exceptions
